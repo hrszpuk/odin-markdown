@@ -21,7 +21,17 @@ text_statement :: proc(stmt: Statement) -> Statement {
     return Statement{stmt.str, .Text}
 }
 
+// bold (and bold_*) procedures create a "text" element.
+// The text inside is made bold using **text** syntax. Equivalent HTML tag would be <b></b>.
+bold :: proc{bold_string, bold_statement}
 
+bold_string :: proc(text: string) -> Statement {
+    return Statement{fmt.aprintf("**%s**", text), .Text}
+}
+
+bold_statement :: proc(stmt: Statement) -> Statement {
+    return Statement{fmt.aprintf("**%s**", stmt.str), .Text}
+}
 
 
 
