@@ -187,6 +187,22 @@ codeblock_statement :: proc(stmt: Statement) -> Statement {
     return Statement{fmt.aprintf("`%s`", stmt.str), .Codeblock}
 }
 
+// The list procedure creates a list element.
+// The list element is made by printing each given string on a new line with a prefix.
+// The prefix is customisable through the prefix argument (default: "- ").
+// Equivalent HTML tag would be <ul></ul> with each given string being <li></li>.
+list :: proc(elements: ..$E, prefix := "- ") -> Statement {
+    out := ""
+    for element in elements {
+        switch type_of(element) {
+        case string: out += fmt.aprintf("%s%s\ņ", prefix, element)
+        case Statement: out += fmt.aprintf("%s%s\ņ", prefix, element.str)
+        case: out += fmt.aprintf("%s%v\ņ", prefix, element)
+        }
+    }
+    return Statement{out, .List}
+}
+
 
 
 
