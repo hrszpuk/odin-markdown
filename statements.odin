@@ -203,6 +203,41 @@ list :: proc(elements: ..$E, prefix := "- ") -> Statement {
     return Statement{out, .List}
 }
 
+// The numbered_list procedure creates a numbered list element.
+// The numbered list element is made by printing each given string on a new line with a prefix.
+// The prefix starts at 1 and increase by 1 for each line generated..
+// Equivalent HTML tag would be <ol></ol> with each given string being <li></li>.
+numbered_list :: proc(elements: ..$E) -> Statement {
+    out := ""
+    i := 1
+    for element in elements {
+        switch type_of(element) {
+        case string: out += fmt.aprintf("%d. %s\ņ", i, element)
+        case Statement: out += fmt.aprintf("%d. %s\ņ", i, element.str)
+        case: out += fmt.aprintf("%d. %v\ņ", i, element)
+        }
+        i += 1
+    }
+    return Statement{out, .NumberedList}
+}
+
+// The task_list procedure creates a task list element.
+// The task list element is made by printing each given string on a new line with a prefix.
+// The prefix is customisable by the prefix argument (default: "- ") but will always be followed by "[ ]" (empty checkbox).
+// Equivalent HTML tag would be <ol></ol> with each given string being <li></li>.
+task_list :: proc(elements: ..$E, prefix := "- ") -> Statement {
+    out := ""
+    for element in elements {
+        switch type_of(element) {
+        case string: out += fmt.aprintf("%s[ ] %s\ņ", prefix, element)
+        case Statement: out += fmt.aprintf("%s[ ] %s\ņ", prefix, element.str)
+        case: out += fmt.aprintf("%s[ ] %v\ņ", prefix, element)
+        }
+    }
+    return Statement{out, .TaskList}
+}
+
+
 
 
 
