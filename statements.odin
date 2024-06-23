@@ -163,6 +163,30 @@ hr :: proc() -> Statement {
     return Statement{"---", .Hr}
 }
 
+// blockquote (and blockquote_*) procedures create a blockquote element.
+// The blockquote element is any text appended with >. Equivalent HTML tag would be <blockquote></blockquote>.
+blockquote :: proc{blockquote_string, blockquote_statement}
+
+blockquote_string :: proc(text: string) -> Statement {
+    return Statement{fmt.aprintf("> %s", text), .Blockquote}
+}
+
+blockquote_statement :: proc(stmt: Statement) -> Statement {
+    return Statement{fmt.aprintf("> %s", stmt.str), .Blockquote}
+}
+
+// codeblock (and codeblock_*) procedures create a codeblock element.
+// The codeblock element is made using the syntax `text`. Equivalent HTML tag would be <code></code>.
+codeblock :: proc{codeblock_string, codeblock_statement}
+
+codeblock_string :: proc(text: string) -> Statement {
+    return Statement{fmt.aprintf("`%s`", text), .Codeblock}
+}
+
+codeblock_statement :: proc(stmt: Statement) -> Statement {
+    return Statement{fmt.aprintf("`%s`", stmt.str), .Codeblock}
+}
+
 
 
 
