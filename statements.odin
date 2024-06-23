@@ -45,6 +45,18 @@ italics_statement :: proc(stmt: Statement) -> Statement {
     return Statement{fmt.aprintf("*%s*", stmt.str), .Text}
 }
 
+// strikethrough (and strikethrough_*) procedures create a "text" element.
+// The text inside is made strikethrough using ~~text~~ syntax. Equivalent HTML tag would be <s></s>.
+strikethrough :: proc{strikethrough_string, strikethrough_statement}
+
+strikethrough_string :: proc(text: string) -> Statement {
+    return Statement{fmt.aprintf("~~%s~~", text), .Text}
+}
+
+strikethrough_statement :: proc(stmt: Statement) -> Statement {
+    return Statement{fmt.aprintf("~~%s~~", stmt.str), .Text}
+}
+
 
 
 
