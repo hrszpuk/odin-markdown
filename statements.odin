@@ -238,6 +238,44 @@ task_list :: proc(elements: ..$E, prefix := "- ") -> Statement {
 }
 
 
+table :: proc(elements: ..Statement) -> Statement {
+    out := ""
+    column_count := 1
+
+    if elements.len > 0 && element[0].type == .Row {
+        out += element[0].str
+        for c in element[0].str {
+            if c == '|' {
+                out += "|"
+            } else {
+                out += "-"
+            }
+        }
+        out += "\n"
+    }
+
+    for element in elements[1:] {
+        switch type_of(element) {
+        case string: out += element
+        case Statement: out += element.str
+        case: out += string(element)
+        }
+    }
+    return Statement{out, .TaskList}
+}
+
+row :: proc(elements: ..Statement) -> Statement {
+    out := ""
+    for element in elements {
+        switch type_of(element) {
+        case string: out += fmt.aprintf("%s[ ] %s\ņ", prefix, element)
+        case Statement: out += fmt.aprintf("%s[ ] %s\ņ", prefix, element.str)
+        case: out += fmt.aprintf("%s[ ] %v\ņ", prefix, element)
+        }
+    }
+    return Statement{out, .TaskList}
+}
+
 
 
 
