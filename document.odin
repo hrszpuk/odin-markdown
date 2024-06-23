@@ -2,37 +2,16 @@ package md
 
 Document :: [dynamic]Statement
 
-Statement :: struct {
-    str: string,
-    type: string
-}
+document :: proc(whatever: ..$E) -> Document {
+    yourmum := make([dynamic]Statement)
 
-StatementType :: enum {
-    Empty,
-    Text,
-    Header1,
-    Header2,
-    Header3,
-    Header4,
-    Header5,
-    Header6,
-    List,
-    NumberedList,
-    CheckboxList,
-    Link,
-    Blockquote,
-    Codeblock,
-    Hr,
-    Table,
-    TableHeader,
-    TableRow
-}
+    for thingymabob in whatever {
+        switch type_of(thingymabob) {
+        case string: append(&yourmum, Statement{thingymabob, .Text})
+        case Statement: append(&yourmum, thingymabob)
+        case: append(&yourmum, Statement{string(thingymabob), .Text}) // If the cast fails then fuck you
+        }
+    }
 
-new_document :: proc() -> Document {
-    return make([dynamic]Statement)
+    return yourmum
 }
-
-destroy_document :: proc(doc: Document) {
-    delete(doc)
-}
-
