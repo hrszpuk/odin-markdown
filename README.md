@@ -1,36 +1,55 @@
 # odin-markdown
 Reading and writing markdown (.md) files with Odin.
 
-## Example
+## Demo
 ```
 package main
 
 import md "external/odin-markdown"
 
 main :: proc() {
-  doc := md::new_document()
-
-  doc, ok := md::load_from_file()
-  doc, ok := md::load_from_string()
-
-  md::text(doc, "text", italics=true, bold=true, strikethrough=true)
-  md::h1(doc, "header 1") // alias: md::headerX("")
-  md::h2(doc, "header 2")
-  md::h3(doc, "header 3")
-  md::h4(doc, "header 4")
-  md::h5(doc, "header 5")
-  md::h6(doc, "header 6")
-  md::list(doc, string[dynamic]{}, ordered=false, checkbox=false)
-  md::link(doc, "text", "link")
-  md::blockquote(doc, "text")
-  md::codeblock(doc, "text", language="odin")
-  md::hr(doc)
-  md::table(doc, )
-  md::table_header(doc, "#", "Name", "Age")
-  md::table_row(doc, "0", "John", "89")
+  using md
   
-  md::write_to_file(doc, "README.md")
-  md::write_to_string(doc)
+  // Load a markdown file
+  doc, ok := md.load_from_file()
+  doc, ok := md.load_from_string()
+
+  // Create a new markdown file
+  doc = document(
+    text("text"),
+    h1("header 1"), // alias: md::headerX("")
+    h2("header 2"),
+    h3("header 3"),
+    h4("header 4"),
+    h5(link("header 5", "#header-6")), // Embed elements
+    h6(bold("header 6")),
+    list("1", "2", bold("3")),
+    link(italics("text"), "link"),
+    blockquote("text"),
+    codeblock("text", language="odin"),
+    hr(),
+    table(row("#", "Name", "Age"), row("0", "John", "89")),
+  )
   
-  md::destroy_document(doc)
+  // Modify a markdown file
+  // - Use standard Odin built-in array procedures (https://odin-lang.org/docs/overview/#dynamic-arrays)
+  elem := doc[8]
+  assign_at(&doc, 1, checklist("1", "2", strikethrough("3"))
+  inject_at(&doc, 1, text("text"))
+  append(&doc, text("text"))
+  pop(&doc)
+  ordered_remove(&doc, 2)
+  
+  // Write a markdown file
+  err := md.write_to_file(doc, "README.md")
+  str, err = md.write_to_string(doc); defer delete(str)
+  
+  // Delete the markdown file data ;)
+  delete(doc) 
 }
+```
+
+## Installation
+
+
+## Contributing
