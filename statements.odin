@@ -33,6 +33,19 @@ bold_statement :: proc(stmt: Statement) -> Statement {
     return Statement{fmt.aprintf("**%s**", stmt.str), .Text}
 }
 
+// italics (and italics_*) procedures create a "text" element.
+// The text inside is made italic using *text* syntax. Equivalent HTML tag would be <i></i>.
+italics :: proc{italics_string, italics_statement}
+
+italics_string :: proc(text: string) -> Statement {
+    return Statement{fmt.aprintf("*%s*", text), .Text}
+}
+
+italics_statement :: proc(stmt: Statement) -> Statement {
+    return Statement{fmt.aprintf("*%s*", stmt.str), .Text}
+}
+
+
 
 
 
