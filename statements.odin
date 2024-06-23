@@ -57,6 +57,83 @@ strikethrough_statement :: proc(stmt: Statement) -> Statement {
     return Statement{fmt.aprintf("~~%s~~", stmt.str), .Text}
 }
 
+// h1 (and h1_*) procedures create a h1 element.
+// The h1 element is any text appended with #. Equivalent HTML tag would be <h1></h1>.
+header1 :: h1
+h1 :: proc{h1_string, h1_statement}
+
+h1_string :: proc(text: string) -> Statement {
+    return Statement{fmt.aprintf("# %s", text), .Header1}
+}
+
+h1_statement :: proc(stmt: Statement) -> Statement {
+    return Statement{fmt.aprintf("# %s", stmt.str), .Header1}
+}
+
+// h2 (and h2_*) procedures create a h1 element.
+// The h2 element is any text appended with ##. Equivalent HTML tag would be <h2></h2>.
+header2 :: h2
+h2 :: proc{h2_string, h2_statement}
+
+h2_string :: proc(text: string) -> Statement {
+    return Statement{fmt.aprintf("## %s", text), .Header2}
+}
+
+h2_statement :: proc(stmt: Statement) -> Statement {
+    return Statement{fmt.aprintf("## %s", stmt.str), .Header2}
+}
+
+// h3 (and h3_*) procedures create a h3 element.
+// The h3 element is any text appended with ###. Equivalent HTML tag would be <h3></h3>.
+header3 :: h3
+h3 :: proc{h3_string, h3_statement}
+
+h3_string :: proc(text: string) -> Statement {
+    return Statement{fmt.aprintf("### %s", text), .Header3}
+}
+
+h3_statement :: proc(stmt: Statement) -> Statement {
+    return Statement{fmt.aprintf("### %s", text), .Header3}
+}
+
+// h4 (and h4_*) procedures create a h4 element.
+// The h4 element is any text appended with ####. Equivalent HTML tag would be <h4></h4>.
+header4 :: h4
+h4 :: proc{h4_string, h4_statement}
+
+h4_string :: proc(text: string) -> Statement {
+    return Statement{fmt.aprintf("#### %s", text), .Header4}
+}
+
+h4_statement :: proc(stmt: Statement) -> Statement {
+    return Statement{fmt.aprintf("#### %s", text), .Header4}
+}
+
+// h5 (and h5_*) procedures create a h5 element.
+// The h5 element is any text appended with #####. Equivalent HTML tag would be <h5></h5>.
+header5 :: h5
+h5 :: proc{h5_string, h5_statement}
+
+h5_string :: proc(text: string) -> Statement {
+    return Statement{fmt.aprintf("##### %s", text), .Header5}
+}
+
+h5_statement :: proc(stmt: Statement) -> Statement {
+    return Statement{fmt.aprintf("##### %s", text), .Header5}
+}
+
+// h6 (and h6_*) procedures create a h6 element.
+// The h6 element is any text appended with ######. Equivalent HTML tag would be <h6></h6>.
+header6 :: h6
+h6 :: proc{h6_string, h6_statement}
+
+h6_string :: proc(text: string) -> Statement {
+    return Statement{fmt.aprintf("###### %s", text), .Header6}
+}
+
+h6_statement :: proc(stmt: Statement) -> Statement {
+    return Statement{fmt.aprintf("###### %s", text), .Header6}
+}
 
 
 
