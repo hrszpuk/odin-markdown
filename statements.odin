@@ -136,6 +136,34 @@ h6_statement :: proc(stmt: Statement) -> Statement {
 }
 
 
+// link (and link_*) procedures create a link element.
+// The link element is made using the syntax [text](link).
+// Equivalent HTML tag would be <a href=></a>.
+link :: proc{link_string_string, link_statement_string, link_string_statement, link_statement_statement}
+
+link_string_string :: proc(display_text: string, link_text: string) -> Statement {
+    return Statement{fmt.aprintf("[%s](%s)", display_text, link_text), .Link}
+}
+
+link_statement_string :: proc(display_text: Statement, link_text: string) -> Statement {
+    return Statement{fmt.aprintf("[%s](%s)", display_text.str, link_text), .Link}
+}
+
+link_string_statement :: proc(display_text: string, link_text: Statement) -> Statement {
+    return Statement{fmt.aprintf("[%s](%s)", display_text, link_text.str), .Link}
+}
+
+link_statement_statement :: proc(display_text: Statement, link_text: Statement) -> Statement {
+    return Statement{fmt.aprintf("[%s](%s)", display_text.str, link_text.str), .Link}
+}
+
+// hr (and hr_*) procedures create a hr element.
+// The h6 element is a horizontal rule. Equivalent HTML tag would be <hr></hr>.
+hr :: proc() -> Statement {
+    return Statement{"---", .Hr}
+}
+
+
 
 
 
