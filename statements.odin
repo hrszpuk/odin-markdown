@@ -1,6 +1,7 @@
 package md
 
 import "core:fmt"
+import "core:string"
 
 /* Statement procedures are representative of markdown constructs.
  * There are usually three procedures for each construct:
@@ -195,9 +196,9 @@ list :: proc(elements: ..$E, prefix := "- ") -> Statement {
     out := ""
     for element in elements {
         switch type_of(element) {
-        case string: out += fmt.aprintf("%s%s\ņ", prefix, element)
-        case Statement: out += fmt.aprintf("%s%s\ņ", prefix, element.str)
-        case: out += fmt.aprintf("%s%v\ņ", prefix, element)
+        case string: out += fmt.aprintf("%s%s\n", prefix, element)
+        case Statement: out += fmt.aprintf("%s%s\n", prefix, element.str)
+        case: out += fmt.aprintf("%s%v\n", prefix, element)
         }
     }
     return Statement{out, .List}
@@ -212,9 +213,9 @@ numbered_list :: proc(elements: ..$E) -> Statement {
     i := 1
     for element in elements {
         switch type_of(element) {
-        case string: out += fmt.aprintf("%d. %s\ņ", i, element)
-        case Statement: out += fmt.aprintf("%d. %s\ņ", i, element.str)
-        case: out += fmt.aprintf("%d. %v\ņ", i, element)
+        case string: out += fmt.aprintf("%d. %s\n", i, element)
+        case Statement: out += fmt.aprintf("%d. %s\n", i, element.str)
+        case: out += fmt.aprintf("%d. %v\n", i, element)
         }
         i += 1
     }
@@ -229,9 +230,9 @@ task_list :: proc(elements: ..$E, prefix := "- ") -> Statement {
     out := ""
     for element in elements {
         switch type_of(element) {
-        case string: out += fmt.aprintf("%s[ ] %s\ņ", prefix, element)
-        case Statement: out += fmt.aprintf("%s[ ] %s\ņ", prefix, element.str)
-        case: out += fmt.aprintf("%s[ ] %v\ņ", prefix, element)
+        case string: out += fmt.aprintf("%s[ ] %s\n", prefix, element)
+        case Statement: out += fmt.aprintf("%s[ ] %s\n", prefix, element.str)
+        case: out += fmt.aprintf("%s[ ] %v\n", prefix, element)
         }
     }
     return Statement{out, .TaskList}
@@ -264,13 +265,16 @@ table :: proc(elements: ..Statement) -> Statement {
     return Statement{out, .TaskList}
 }
 
-row :: proc(elements: ..Statement) -> Statement {
+row :: proc(elements: ..Statement, prefix := "- ") -> Statement {
     out := ""
     for element in elements {
-        switch type_of(element) {
-        case string: out += fmt.aprintf("%s[ ] %s\ņ", prefix, element)
-        case Statement: out += fmt.aprintf("%s[ ] %s\ņ", prefix, element.str)
-        case: out += fmt.aprintf("%s[ ] %v\ņ", prefix, element)
+        switch typeid_of(type_of(element)) {
+        case string:
+            out += fmt.aprintf("%s[ ] %s\n", prefix, element)
+        case Statement:
+            out += fmt.aprintf("%s[ ] %s\n", prefix, element.str)
+        case:
+            out += fmt.aprintf("%s[ ] %v\n", prefix, element)
         }
     }
     return Statement{out, .TaskList}
