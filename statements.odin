@@ -240,44 +240,36 @@ task_list :: proc(elements: ..$E, prefix := "- ") -> Statement {
 
 
 table :: proc(elements: ..Statement) -> Statement {
-    out := ""
-    column_count := 1
+    out := strings.builder_make_none(); defer strings.builder_destroy(&out)
 
-    if elements.len > 0 && elements[0].type == .Row {
-        out += elements[0].str
+    if len(elements) > 0 && elements[0].type == .Row {
+        strings.write_string(&out, elements[0].str)
         for c in elements[0].str {
             if c == '|' {
-                out += "|"
+                strings.write_rune(&out, c)
             } else {
-                out += "-"
+                strings.write_rune(&out, '-')
             }
         }
-        out += "\n"
+        strings.write_rune(&out, '\n')
     }
 
     for element in elements[1:] {
-        switch type_of(element) {
-        case string: out += element
-        case Statement: out += element.str
-        case: out += string(element)
+        switch typeid_of(type_of(element)) {
+        case Statement: strings.write_string(&out, element.str)
+        case: strings.write_string(&out, fmt.aprintf("%v", element))
         }
     }
-    return Statement{out, .TaskList}
+    return Statement{strings.clone(strings.to_string(out)), .TaskList}
 }
 
 row :: proc(elements: ..Statement, prefix := "- ") -> Statement {
-    out := ""
+    str := make([dynamic]string); defer delete(str)
     for element in elements {
-        switch typeid_of(type_of(element)) {
-        case string:
-            out += fmt.aprintf("%s[ ] %s\n", prefix, element)
-        case Statement:
-            out += fmt.aprintf("%s[ ] %s\n", prefix, element.str)
-        case:
-            out += fmt.aprintf("%s[ ] %v\n", prefix, element)
-        }
+        append(&str, element.str)
     }
-    return Statement{out, .TaskList}
+    out := strings.join(str[:], " | "); defer delete(out)
+    return Statement{fmt.aprintf("| %s |", out), .TaskList}
 }
 
 
