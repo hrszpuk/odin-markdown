@@ -13,6 +13,6 @@ main :: proc() {
         h1("Welcome"),
     )
 
-    fmt.println(doc)
+    fmt.println(write_to_string(doc))
     destroy_document(doc)
 }
