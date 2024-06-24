@@ -1,9 +1,11 @@
 package md
 
 import "core:strings"
+import "core:os"
 
 write_to_file :: proc(doc: Document, filename: string) -> bool {
-    return false
+    s := write_to_string(doc); defer delete(s)
+    return os.write_entire_file(filename, transmute([]u8)s)
 }
 
 write_to_string :: proc(doc: Document) -> string {
