@@ -2,7 +2,7 @@ package md
 
 Statement :: struct {
     str: string,
-    type: StatementType
+    type: StatementType,
 }
 
 StatementType :: enum {
